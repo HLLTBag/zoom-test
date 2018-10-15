@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+</head>
+
+<body>
+    <button onclick="join()">join room 8700073849</button>
+    <button onclick="leave()">leave</button>
+    <script>
+        const { ipcRenderer } = require('electron')
+        const join = () => ipcRenderer.send('join')
+        const leave = () => ipcRenderer.send('leave')
+    </script>
+</body>
+
+</html>

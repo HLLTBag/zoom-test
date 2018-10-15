@@ -1,0 +1,23 @@
+{
+    "name": "demo",
+    "version": "1.0.0",
+    "description": "test",
+    "main": "main.js",
+    "scripts": {
+      "start": "./node_modules/.bin/electron main",
+      "copyZoomSDKPlugins": "cp -Rf ../Plugins ./node_modules/electron/dist/Electron.app/Contents/",
+      "copyZoomSDK": "cp -Rf ../ZoomSDK/ ./node_modules/electron/dist/Electron.app/Contents/Resources/app/node_modules/ZoomSDK",
+      "mkdirZoomSDK": "mkdir -p ./node_modules/electron/dist/Electron.app/Contents/Resources/app/node_modules/ZoomSDK",
+      "copyJsLib": " cp -Rf ../lib ./",
+      "copyObjcLib": "cp -Rf /usr/lib/libobjc.A.dylib ./node_modules/electron/dist/Electron.app/Contents/Resources/app/node_modules/ZoomSDK",
+      "rebuild": "npm rebuild --runtime=electron --target=2.0.2 --disturl=https://atom.io/download/atom-shell",
+      "postinstall": "npm run mkdirZoomSDK && npm run copyZoomSDK && npm run copyZoomSDKPlugins && npm run copyObjcLib && npm run rebuild && npm run copyJsLib"
+    },
+    "author": "",
+    "license": "ISC",
+    "gypfile": true,
+    "dependencies": {
+      "electron": "^2.0.2",
+      "nodobjc": "^2.1.0"
+    }
+  }

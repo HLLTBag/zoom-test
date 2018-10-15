@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hello World!</title>
+</head>
+
+<body>
+    <button onclick="join()">join room 8700073849</button>
+    <button onclick="leave()">leave</button>
+    <script>
+        const ZOOMSDKMOD = require("./lib/zoom_sdk.js");
+
+        let sdkReady = false;
+
+        let zoomsdk = null;
+        let zoomauth = null;
+        let zoommeeting = null;
+
+        // get sdk instance
+        zoomsdk = ZOOMSDKMOD.ZoomSDK.getInstance({
+            threadsafemode: 0,
+            apicallretcb: function (apiname, ret) {
+                console.log(`call api, apiname: ${apiname}, ret: ${ret}`);
+                if ("InitSDK" == apiname && ZOOMSDKMOD.ZoomSDKError.SDKERR_SUCCESS == ret) {
+
+                    // get zoom auth module
+                    zoomauth = zoomsdk.GetAuth({
+                        authcb: status => {
+                            // it's the callback after auth, never be triggered if zoom sdk runs in renderer process
+                            console.log("zoom sdk auth cb", status);
+                            sdkReady = status === ZOOMSDKMOD.ZOOMAUTHMOD.ZoomAuthResult.AUTHRET_SUCCESS;
+                        }
+                    });
+
+                    // get zoom meeting module
+                    zoommeeting = zoomsdk.GetMeeting({});
+
+                    console.log('before call sdk auth');
+                    zoomauth.SDKAuth(
+                        "PWT7phpeZP00QnlSCXik2vjEzMgdQIJGWqeN",
+                        "UG6N5OOSgGUuxb0FSzyJW2gPZItojqoEwImp"
+                    );
+                }
+            },
+            ostype: ZOOMSDKMOD.ZOOM_TYPE_OS_TYPE.MAC_OS
+        });
+
+        zoomsdk.InitSDK({
+            webdomain: "https://www.zoom.us",
+            langid: ZOOMSDKMOD.ZoomSDK_LANGUAGE_ID.LANGUAGE_English
+        });
+
+
+        function join() {
+            console.log('join meeting 8700073849');
+            sdkReady && zoommeeting.JoinMeeting({
+                meetingnum: "8700073849",
+                psw: "test",
+                username: "2333"
+            });
+        }
+
+        function leave() {
+            sdkReady && zoommeeting.LeaveMeeting();
+        }
+
+    </script>
+</body>
+
+</html>
